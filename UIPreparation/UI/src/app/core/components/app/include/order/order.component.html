@@ -1,0 +1,200 @@
+﻿<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title ">{{'OrderList'| translate}}</h4>
+            <a *ngIf="checkClaim('CreateOrderCommand')" class="pull-right" data-toggle="modal" data-target="#order"> <i style="color:white"  title="{{'Add'| translate}}" class="far fa-plus-square fa-2x"></i></a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              
+              <div class="col-md-4 pull-right">
+                <mat-form-field>
+                  <mat-label>Filter</mat-label>
+                  <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
+              </div>
+							<table mat-table [dataSource]="dataSource" matSort>
+
+
+								
+                   <!-- <ng-container matColumnDef="id">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Id'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.productId}}</td>
+				   </ng-container> -->
+	
+	
+                   <ng-container matColumnDef="customerId">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'CustomerId'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.customerId}}</td>
+				   </ng-container>
+           <!-- <ng-container matColumnDef="productId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'ProductId'|translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element.id}}</td>
+              </ng-container> -->
+
+              <ng-container matColumnDef="productName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'productName'|translate}}</th>
+                <td mat-cell *matCellDef="let element">{{element.productName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="size">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'size'|translate}}</th>
+              <td mat-cell *matCellDef="let element">{{element.size}}</td>
+            </ng-container>
+            <ng-container matColumnDef="colorName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'colorName'|translate}}</th>
+              <td mat-cell *matCellDef="let element">{{element.colorName}}</td>
+            </ng-container>
+
+
+                   <ng-container matColumnDef="quantity">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Quantity'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.quantity}}</td>
+				   </ng-container>
+
+           <!-- <ng-container matColumnDef="orderDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'orderDate'|translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element.CreatedDate}}</td>
+          </ng-container> -->
+
+
+								<ng-container matColumnDef="update" >
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td style="width: 25px;" mat-cell
+                    *matCellDef="let element">
+                    <a *ngIf="checkClaim('UpdateOrderCommand')" data-toggle="modal" data-target="#order"  (click)="getOrderById(element.orderId)">
+                      <i title="{{'Update'| translate}}" style="color:#ff5722;" class="far fa-edit"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete" >
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td  style="width: 25px;" mat-cell
+                    *matCellDef="let element">
+                    <a *ngIf="checkClaim('DeleteOrderCommand')" (confirm)="deleteOrder(element.orderId)" [swal]="deleteSwal"><i title="{{'Delete'| translate}}" style="color: #D9534E;"class="fas fa-trash-alt"></i></a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow style="text-align: center;">
+                  <td class="mat-cell" colspan="4">{{'NoRecordsFound' |translate}} "{{input.value}}"</td>
+                </tr>
+							</table>
+							<mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+							</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal modal-angular fade" id="order" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="clearFormGroup(orderAddForm)"><span aria-hidden="true">&times;</span></button>
+        <h4 class="margin-top">
+           {{'OrderForm'| translate}}
+        </h4>
+        <div class="separator"></div>
+        <form *ngIf="orderAddForm" [formGroup]="orderAddForm" (ngSubmit)="save()">
+          
+					<!-- <div class="row">
+						<div class="col-md-12">
+							<select class="browser-default custom-select" formControlName="createdUserId">
+								<option *ngFor="let item of orderlookUp" [value]="item.id"> {{item.label}}</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="createdDate" type="date" id="createdDate" name="createdDate"
+                       formControlName="createdDate" />
+                <div class="alert alert-danger"
+                     *ngIf="orderAddForm.get('createdDate')!.hasError('createdDate') && orderAddForm.get('createdDate')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+					<div class="row">
+						<div class="col-md-12">
+							<select class="browser-default custom-select" formControlName="lastUpdatedUserId">
+								<option *ngFor="let item of orderlookUp" [value]="item.id"> {{item.label}}</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="lastUpdatedDate" type="date" id="lastUpdatedDate" name="lastUpdatedDate"
+                       formControlName="lastUpdatedDate" />
+                <div class="alert alert-danger"
+                     *ngIf="orderAddForm.get('lastUpdatedDate')!.hasError('lastUpdatedDate') && orderAddForm.get('lastUpdatedDate')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div><div class="row">
+            <div class="col col-md-2">
+                       <mat-checkbox  formControlName="status" id="status" name="status" > status
+                      </mat-checkbox>
+            </div>
+          </div><div class="row">
+            <div class="col col-md-2">
+                       <mat-checkbox  formControlName="isDeleted" id="isDeleted" name="isDeleted" > isDeleted
+                      </mat-checkbox>
+            </div>
+          </div>
+					<div class="row">
+						<div class="col-md-12">
+							<select class="browser-default custom-select" formControlName="customerId">
+								<option *ngFor="let item of orderlookUp" [value]="item.id"> {{item.label}}</option>
+							</select>
+						</div>
+					</div> -->
+
+          <div class="row">
+						<div class="col-md-12">
+              <!-- <select class="browser-default custom-select" [(ngModel)]="selectedColorId"  formControlName="productId">
+                <option *ngFor="let color of colorList" [value]="color.id">{{ color.name }}</option>
+              </select> -->
+							<select class="browser-default custom-select form-select"  formControlName="productId">
+								<option *ngFor="let item of productDtoList" [value]="item.productId">{{item.productId}}{{item.productName}}: {{item.colorName}}:{{getEnumSizeString(item.size)}}  {{item.productId}}</option>
+							</select>
+						</div>
+					</div>
+
+          
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="quantity" type="text" id="quantity" name="quantity"
+                       formControlName="quantity" />
+                <div class="alert alert-danger"
+                     *ngIf="orderAddForm.get('quantity')!.hasError('quantity') && orderAddForm.get('quantity')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+                   
+          <button mat-raised-button type="submit" class="btn btn-danger pull-right">{{'Save'|translate}}</button>
+          <div class="clearfix"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #deleteSwal title="{{'DeleteConfirm' | translate}}" icon = "error" [showCancelButton]="true"
+	[confirmButtonText] = "'OK'"[cancelButtonText] = "'Cancel'" >
+</swal>
+
