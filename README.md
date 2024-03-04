@@ -1,49 +1,67 @@
-Simple Order System
+# Simple Order Management System
 
-User Information (FullName, PhoneNumber, Email, Gender, Password, RoleId)
-Password should not be visible in the database. Password Salt/Hash.
-Role Information (Name)
-Role-User Mapping (RoleId, UserId)
-A User can have multiple roles.
-Customer Information (CustomerName, CustomerCode, Address, PhoneNumber, Email)
-Product Information (Name, ColorId, Size(S-M-L-XL))
-Warehouse Information (ProductId, Quantity, ReadyForSale?)
-Order Information (CustomerId, ProductId, Quantity)
-Users in the system are our company's white-collar employees.
-The system will only be used within the company.
-Login is mandatory to access the pages.
+This project aims to develop a simple order management system with the following functionalities:
 
-Roles:
-Administrator
-User
-Sales Representative
+1. **User Information**: Stores user details including name, phone number, email, gender, password (hashed and salted for security), and role ID.
+2. **Role Information**: Stores role names.
+3. **Role-User Mapping**: Maps roles to users allowing a user to have multiple roles.
+4. **Customer Information**: Contains customer details such as customer name, code, address, phone number, and email.
+5. **Product Information**: Stores product details including name, color ID, and size (S-M-L-XL).
+6. **Warehouse Information**: Tracks the stock of products in the warehouse including product ID, quantity, and availability for sale.
+7. **Order Information**: Records orders with customer ID, product ID, and quantity.
 
-Pages:
-Login Page,
-User Definition Page, Role:(Administrator)
-Role Definition Page, Role:(Administrator)
-Customer Definition Page, Role:(Administrator, Sales Representative)
-Product Definition Page, Role:(Administrator, Sales Representative, User)
-Order Definition Page, Role:(Sales Representative)
-Warehouse Report Screen, Role:(Administrator, Sales Representative, User)
-Order Report Screen, Role:(Administrator, Sales Representative, User)
+### User Roles and Permissions
 
-Our Sales Representative checks the order information obtained from the customer on the warehouse report screen and, if the sale is possible, creates the order record.
-The Sales Representative may not perform the necessary checks on the Warehouse Report Screen. If they attempt to place an order for products that are not in stock, they should receive a warning and should not be allowed to proceed with the transaction.
+- **Administrator**
+- **User**
+- **Customer Representative**
 
-In the project, MS Sql is requested as the database, .net Core multi-layered architecture as the back-end, and Angular CLI as the front-end.
-The project is requested to be developed using the Dev Architecture extensions, which is a fast application framework developed for .Net 5.
-Thanks to Dev Architecture, User, Role, and page authorizations will be ready in the system. You don't need to create an extra class.
-Body information is expected to be kept as an enum within the project. The body information stored as int in the database should appear as a string to the user. You can do this by writing the string equivalents of int values in the Enum.
-Color definition will open a modal with a button on the Product definition page (Use Angular Dialog). Previously defined colors can be displayed in the modal. Create/Update/Delete can be done.
-If needed, you are free to add new columns to the tables above.
-When deletion is performed in the system, data should not be deleted from the database. The IsDeleted column should be set to true to prevent the data from being displayed in the front-end.
+### Pages and Access Roles
 
-All tables must have the following columns:
-int Id { get; set; }
-int CreatedUserId { get; set; }
-DateTime CreatedDate { get; set; }
-int LastUpdatedUserId { get; set; }
-DateTime LastUpdatedDate { get; set; }
-bool Status { get; set; }
-bool isDeleted { get; set; }
+- **Login Page**: Accessible by all users.
+- **User Management**: Role: Administrator
+- **Role Management**: Role: Administrator
+- **Customer Management**: Role: Administrator, Customer Representative
+- **Product Management**: Role: Administrator, Customer Representative, User
+- **Order Management**: Role: Customer Representative
+- **Warehouse Report Screen**: Role: Administrator, Customer Representative, User
+- **Order Report Screen**: Role: Administrator, Customer Representative, User
+
+### Functionality Overview
+
+- **Sales Representative**: Validates order information received from the customer on the warehouse report screen and creates an order record if the sale is possible.
+- If the Sales Representative does not perform necessary checks on the warehouse report screen and attempts to place an order for products that are not in stock, they should receive a warning, and the transaction should not be allowed to proceed.
+
+### Technology Stack
+
+- **Database**: MS SQL
+- **Back-end**: .NET Core with multi-layered architecture
+- **Front-end**: Angular CLI
+- **Development Framework**: .NET 5 using Dev Architecture extensions for rapid application development.
+
+### Additional Requirements
+
+- Body sizes should be stored as enums in the project.
+- Color definition in the product definition page should open a modal through a button (using Angular Dialog) where previously defined colors can be viewed and managed (Create/Update/Delete).
+- Additional columns can be freely added to the above tables if necessary.
+- Deletion of records should not result in actual data deletion from the database. Instead, the `IsDeleted` column should be set to true to prevent the data from being displayed on the front-end.
+
+### Database Schema
+
+All tables must contain the following columns:
+
+- `Id` (int)
+- `CreatedUserId` (int)
+- `CreatedDate` (DateTime)
+- `LastUpdatedUserId` (int)
+- `LastUpdatedDate` (DateTime)
+- `Status` (bool)
+- `IsDeleted` (bool)
+
+These attributes can be added to the BaseEntity in the Dev Architecture.
+
+### Development Guidelines
+
+- Use English keywords throughout the codebase.
+
+This README provides an overview of the project's requirements and functionalities before development begins.
